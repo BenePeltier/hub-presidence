@@ -324,7 +324,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
     <div id="gateLogin" hidden>
       <div class="eyebrow">Hub de la Présidence</div>
       <h1 style="margin-top:10px">Bienvenue <em>à bord.</em></h1>
-      <p class="sub" style="margin-top:10px">Cet espace est réservé aux Président(e)s. Connecte-toi avec ton compte APOLLO.</p>
+      <p class="sub" style="margin-top:10px">Cet espace est réservé à l'équipe de pilotage : Président(e), Vice-Président(e), Secrétaire Général(e) et Coach Éducateur. Connecte-toi avec ton compte APOLLO.</p>
       <form id="formPassword" style="margin-top:18px" novalidate>
         <label>E-mail<input id="loginEmail" type="email" name="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required></label>
         <label>Mot de passe<input id="loginPassword" type="password" name="password" autocomplete="current-password" required></label>
@@ -348,7 +348,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
     <div id="gateDenied" hidden>
       <div class="eyebrow">Hub de la Présidence</div>
       <h1 style="margin-top:10px">Un espace <em>réservé.</em></h1>
-      <p class="sub" style="margin-top:10px" id="deniedText">Ce hub est réservé aux Président(e)s de groupe APOLLO. Ton compte est bien reconnu, sans le rôle de Président(e) pour l'instant.</p>
+      <p class="sub" style="margin-top:10px" id="deniedText">Ce hub est réservé à l'équipe de pilotage des groupes APOLLO : Président(e), Vice-Président(e), Secrétaire Général(e) et Coach Éducateur. Ton compte est bien reconnu, sans l'un de ces rôles pour l'instant.</p>
       <div style="margin-top:18px; display:grid; gap:10px"><button class="btn btn-ghost" type="button" data-logout>Changer de compte</button></div>
     </div>
   </div>
@@ -592,8 +592,10 @@ const HUB = {
   /* Connexion : le projet Supabase de l'app APOLLO France (clé publique, comme dans l'Espace Président). */
   supabaseUrl: "https://iaqcmrzgvlbedbiwyuze.supabase.co",
   supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhcWNtcnpndmxiZWRiaXd5dXplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkyMjYwMTMsImV4cCI6MjA1NDgwMjAxM30.kzG-7mJ5srAUynfHS47Q_neeDWxYGrDi76klY3O-XHI",
-  /* Qui entre : rôle Président(e) actif (president) et comptes nationaux CEO, DN, DR, Consultant (admin), comme l'Espace Président. */
+  /* Qui entre : rôle Président(e) actif (president) et comptes nationaux CEO, DN, DR, Consultant (admin), comme l'Espace Président,
+     plus les rôles du Crew ci-dessous (début du libellé user_role, sans accents ni majuscules), sur une fiche active. */
   allowedHow: ["president", "admin"],
+  allowedRoles: ["president", "vice", "vp", "secretaire general", "coach"],
   previewNoGate: false
 };
 
@@ -675,10 +677,26 @@ const HUB = {
     var d = r.data || {};
     var groups = Array.isArray(d.groups) ? d.groups : [];
     var ok = groups.some(function (g) { return HUB.allowedHow.indexOf(g.how) >= 0; });
-    if (!ok) { showGate("denied"); return; }
     var me = d.me || {};
     if (!me.group) { var pg = groups.filter(function (g) { return g.how === "president"; })[0] || groups[0]; if (pg) me.group = pg.name; }
+    if (!ok) {
+      var crew = await crewRow(sess.user.id);
+      if (crew) { ok = true; me = { fn: crew.user_firstname, ln: crew.user_lastname, role: crew.user_role, group: crew.group_name }; }
+    }
+    if (!ok) { showGate("denied"); return; }
     showHub(me);
+  }
+
+  function norm(s) { return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z ]+/g, " ").replace(/\s+/g, " ").trim(); }
+  function roleAllowed(role) {
+    var n = norm(role);
+    return HUB.allowedRoles.some(function (k) { return n === k || n.indexOf(k) === 0 || (k === "secretaire general" && n.indexOf(k) >= 0); });
+  }
+  /* VP, SG, Coach Éducateur : la fiche active du membre dans l'app, lue avec sa propre session. */
+  async function crewRow(uid) {
+    var q = await sb.from("MembresApollo").select("user_role,user_etat,user_etat_id,user_firstname,user_lastname,group_name").eq("user_id", uid);
+    if (q.error || !Array.isArray(q.data)) return null;
+    return q.data.filter(function (x) { return (x.user_etat === "Actif" || x.user_etat_id === "1") && roleAllowed(x.user_role); })[0] || null;
   }
 
   async function logout() {
