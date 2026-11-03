@@ -14,6 +14,7 @@
 <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="assets/favicon-192.png" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Hub Présidence">
 <link rel="canonical" href="https://president.apollo-business.com/">
 <style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
@@ -77,9 +78,18 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
 
 .wrap {
-  max-width: 1040px; margin: 0 auto;
+  max-width: 1080px; margin: 0 auto;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (min-width: 700px) {
+  .wrap { padding-left: max(40px, env(safe-area-inset-left, 0px)); padding-right: max(40px, env(safe-area-inset-right, 0px)); }
+  body { font-size: 16px; }
+  .tool p, .role p, .rit li, .ladder p, .tl .what p, .doc p, .script p, .note, .grow { font-size: 14.5px; }
+  .tool b, .role .h, .tl .what b, .doc b { font-size: 17px; }
+  .sec { padding-block: 56px; }
+  .hero .wrap { padding-block: 22px 52px; }
+  .hero-body { margin-top: 56px; }
 }
 
 /* ---------- Bande d'ouverture (nuit) ---------- */
@@ -116,18 +126,18 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .btn .ic { font-size: 19px; }
 .btn:active { transform: translateY(1px); }
 .btn-primary { background: var(--orange); color: #0F0F13; border-color: var(--orange); }
-.btn-primary:hover { background: #FF8F1F; }
+@media (hover: hover) { .btn-primary:hover { background: #FF8F1F; } }
 .btn-ghost { background: transparent; color: var(--on-night); border-color: rgba(246, 239, 228, 0.34); }
-.btn-ghost:hover { border-color: var(--on-night); }
+@media (hover: hover) { .btn-ghost:hover { border-color: var(--on-night); } }
 .hero .hint { margin-top: 14px; font-size: 13px; color: var(--on-night-muted); display: flex; align-items: center; gap: 8px; }
 .hero .hint .ic { font-size: 16px; color: var(--orange); }
 
 /* ---------- Sommaire collant ---------- */
 .jump { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: var(--bg); border-bottom: 1px solid var(--line); }
-.jump .wrap { display: flex; gap: 8px; overflow-x: auto; padding-block: 10px; scrollbar-width: none; }
+.jump .wrap { display: flex; gap: 8px; overflow-x: auto; padding-block: 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
 .jump .wrap::-webkit-scrollbar { display: none; }
 .jump a { flex: none; font-size: 13px; font-weight: 600; text-decoration: none; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--soft); background: var(--card); }
-.jump a:hover { border-color: var(--orange); color: var(--ink); }
+@media (hover: hover) { .jump a:hover { border-color: var(--orange); color: var(--ink); } }
 
 /* ---------- Sections ---------- */
 .sec { padding-block: 44px; border-bottom: 1px solid var(--line); }
@@ -136,10 +146,12 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .sec h2 { margin-top: 10px; font-size: clamp(27px, 4.6vw, 38px); font-weight: 700; letter-spacing: -0.024em; line-height: 1.06; }
 .sec .lead { margin-top: 12px; font-size: 16px; color: var(--soft); line-height: 1.55; }
 .grid { display: grid; gap: 12px; margin-top: 24px; }
-.g3 { grid-template-columns: 1fr; }
-.g2 { grid-template-columns: 1fr; }
-@media (min-width: 680px) { .g2 { grid-template-columns: 1fr 1fr; } .g3 { grid-template-columns: 1fr 1fr; } }
-@media (min-width: 960px) { .g3 { grid-template-columns: 1fr 1fr 1fr; } }
+.g-tools, .g-rit, .g-crew, .g2 { grid-template-columns: 1fr; }
+/* iPad portrait (700 à 1023 px) : deux colonnes d'outils, trois rituels, Crew en deux colonnes avec la Présidence en pleine largeur */
+@media (min-width: 600px) { .g2 { grid-template-columns: 1fr 1fr; } .g-tools { grid-template-columns: 1fr 1fr; } .g-crew { grid-template-columns: 1fr 1fr; } .g-crew .lead-role { grid-column: 1 / -1; } }
+@media (min-width: 700px) { .g-rit { grid-template-columns: repeat(3, 1fr); } }
+/* iPad paysage et ordinateur */
+@media (min-width: 1024px) { .g-tools { grid-template-columns: repeat(3, 1fr); } .g-crew { grid-template-columns: repeat(3, 1fr); } }
 
 .chip { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; letter-spacing: 0.04em; padding: 4px 9px; border-radius: 999px; background: var(--chip); color: var(--soft); white-space: nowrap; }
 .chip.orange { background: var(--orange-soft); color: var(--orange-deep); }
@@ -151,7 +163,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   text-decoration: none; color: inherit; min-width: 0; position: relative;
   transition: border-color .15s ease, transform .15s ease;
 }
-.tool:hover { border-color: var(--orange); transform: translateY(-1px); }
+@media (hover: hover) { .tool:hover { border-color: var(--orange); transform: translateY(-1px); } }
 .tool .badge { width: 46px; height: 46px; border-radius: 12px; background: var(--orange-soft); color: var(--orange-deep); display: grid; place-items: center; font-size: 24px; }
 .tool b { display: block; font-size: 16.5px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; }
 .tool p { margin-top: 3px; font-size: 13.5px; color: var(--muted); line-height: 1.45; }
@@ -174,7 +186,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   text-decoration: none; border: 1px solid var(--line-strong); color: var(--ink); background: var(--card); transition: border-color .15s ease;
 }
 .fbtn .ic { font-size: 18px; color: var(--orange-deep); }
-.fbtn:hover { border-color: var(--orange); }
+@media (hover: hover) { .fbtn:hover { border-color: var(--orange); } }
 .fbtn.main { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .fbtn.main .ic { color: var(--orange); }
 .fbtn.soon { opacity: 0.5; cursor: default; }
@@ -256,6 +268,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 /* Documents */
 .docs { margin-top: 24px; display: grid; gap: 10px; }
+@media (min-width: 1024px) { .docs { grid-template-columns: repeat(3, 1fr); } }
 .doc { display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: start; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 16px; min-width: 0; }
 .doc .badge { width: 40px; height: 40px; border-radius: 10px; background: var(--orange-soft); color: var(--orange-deep); display: grid; place-items: center; font-size: 22px; }
 .doc b { display: block; font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
@@ -311,7 +324,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
       <h2>Un pavé <em>par outil.</em></h2>
       <p class="lead">Tes accès depuis un ordinateur ou un téléphone. Ma minute et l'app APOLLO vivent sur ton téléphone, LA MATINALE s'active dans l'Espace Président.</p>
     </div>
-    <div class="grid g3">
+    <div class="grid g-tools">
       <a class="tool" data-link="espace" href="#"><span class="badge"><svg class="ic" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 4v16l13 -8z" /></svg></span><span><b>Espace Président</b><p>Préparer la réunion la veille, lancer le deck le matin, piloter depuis ton téléphone.</p><span class="chip orange soon-tag">Adresse à renseigner</span></span><svg class="ic chev" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg></a>
       <a class="tool" data-link="delphi" href="#"><span class="badge"><svg class="ic" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg></span><span><b>DELPHI</b><p>La bibliothèque des ateliers. Ton Coach Éducateur y choisit l'atelier de la semaine.</p><span class="chip orange soon-tag">Adresse à renseigner</span></span><svg class="ic chev" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg></a>
       <a class="tool" data-link="dashboard" href="#"><span class="badge"><svg class="ic" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 4h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1" /><path d="M5 16h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1" /><path d="M15 12h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1" /><path d="M15 4h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1" /></svg></span><span><b>Dashboard APOLLO</b><p>Les chiffres de ton groupe et de chaque membre, en temps réel.</p><span class="chip orange soon-tag">Adresse à renseigner</span></span><svg class="ic chev" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg></a>
@@ -381,7 +394,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
       <h2>Ce qui revient, <em>et qui fait la différence.</em></h2>
       <p class="lead">Un groupe se construit par la régularité. Ces rendez-vous sont fixes.</p>
     </div>
-    <div class="grid g3">
+    <div class="grid g-rit">
       <div class="rit"><div class="h"><svg class="ic" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 12v-3a3 3 0 0 1 3 -3h13m-3 -3l3 3l-3 3" /><path d="M20 12v3a3 3 0 0 1 -3 3h-13m3 3l-3 -3l3 -3" /></svg>Hebdo</div><ul><li>Préparation J-1 dans l'Espace Président</li><li>Réunion de groupe</li><li>Debrief Crew, 10 minutes</li></ul></div>
       <div class="rit"><div class="h"><svg class="ic" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M16 3l0 4" /><path d="M8 3l0 4" /><path d="M4 11l16 0" /><path d="M8 15h2v2h-2z" /></svg>Mensuel</div><ul><li>Réunion de Crew, 1&nbsp;h</li><li>Point avec ton Consultant, 30&nbsp;min</li><li>Bilan du 4·2·1, de la présence et de la feuille de route</li></ul></div>
       <div class="rit"><div class="h"><svg class="ic" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 13a8 8 0 0 1 7 7a6 6 0 0 0 3 -5a9 9 0 0 0 6 -8a3 3 0 0 0 -3 -3a9 9 0 0 0 -8 6a6 6 0 0 0 -5 3" /><path d="M7 14a6 6 0 0 0 -3 6a6 6 0 0 0 6 -3" /><path d="M15 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>Mandature</div><ul><li>LA MATINALE</li><li>Intégration de chaque nouveau membre, avec le Manager d'intégration</li><li>Passation</li></ul></div>
@@ -416,7 +429,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
       <h2>Chacun connaît sa part, <em>toi tu gardes le cap.</em></h2>
       <p class="lead">Le Crew est nommé pour six mois, avec toi. Chaque rôle aura son propre manuel, rangé ici.</p>
     </div>
-    <div class="grid g2">
+    <div class="grid g-crew">
       <div class="role lead-role"><div class="h"><svg class="ic" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 14h14l-4.5 -4.5l4.5 -4.5h-14v16" /></svg>Président(e)</div><p>Le cap, le tempo, l'exemple. Pilote le deck et l'Espace Président.</p><span class="chip orange">Le guide de la Présidence</span></div>
       <div class="role"><div class="h"><svg class="ic" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>Vice-Président(e)</div><p>Chiffres, présences, adhésions et renouvellements. Pilote l'ESM, l'Équipe de Suivi des Membres, avec ses comités de sélection, de surveillance et de soutien.</p><span class="chip">Manuel en préparation</span></div>
       <div class="role"><div class="h"><svg class="ic" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" ><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M13 12v.01" /><path d="M3 21h18" /><path d="M5 21v-16a2 2 0 0 1 2 -2h6m4 10.5v7.5" /><path d="M21 7h-7m3 -3l-3 3l3 3" /></svg>Secrétaire Général(e)</div><p>Lien avec le lieu d'accueil, conférenciers, conditions de participation, tirage au sort. Pilote l'Équipe d'Accueil.</p><span class="chip">Manuel en préparation</span></div>
