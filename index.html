@@ -92,6 +92,37 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .hero-body { margin-top: 56px; }
 }
 
+/* ---------- Porte d'entrée (connexion) ---------- */
+.gate { min-height: 100vh; min-height: 100dvh; background: var(--night); color: var(--on-night); display: grid; place-items: center; position: relative; overflow: hidden; }
+.gate .glow { position: absolute; inset: 0; background: radial-gradient(60% 50% at 80% 0%, rgba(247, 127, 0, 0.16), transparent 70%); pointer-events: none; }
+.gate .orbit { position: absolute; right: -30vw; top: -36vw; width: 72vw; height: 72vw; max-width: 600px; max-height: 600px; border: 1.5px solid rgba(247, 127, 0, 0.5); border-radius: 50%; pointer-events: none; }
+.gate .orbit::after { content: ""; position: absolute; width: 12px; height: 12px; border-radius: 50%; background: var(--orange); left: 11%; top: 76%; box-shadow: 0 0 0 6px rgba(247, 127, 0, 0.18); }
+.gate-card { position: relative; width: 100%; max-width: 440px; padding-block: 40px 48px; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); display: grid; gap: 18px; }
+.gate-card .brand { height: 52px; margin-bottom: 10px; }
+.gate h1 { font-size: 30px; font-weight: 700; letter-spacing: -0.024em; line-height: 1.08; }
+.gate h1 em { font-style: normal; color: var(--orange); }
+.gate .sub { font-size: 15px; color: var(--on-night-muted); line-height: 1.5; }
+.gate form { display: grid; gap: 12px; }
+.gate label { display: grid; gap: 6px; font-size: 12.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--on-night-muted); }
+.gate input { width: 100%; min-height: 50px; padding: 0 16px; font: inherit; font-size: 16px; color: var(--on-night); background: rgba(246, 239, 228, 0.07); border: 1px solid rgba(246, 239, 228, 0.22); border-radius: 12px; outline: none; }
+.gate input:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(247, 127, 0, 0.22); }
+.gate input[inputmode="numeric"] { letter-spacing: 0.3em; font-weight: 700; font-size: 22px; text-align: center; }
+.gate .btn { justify-content: center; width: 100%; }
+.gate .btn[disabled] { opacity: 0.6; cursor: default; }
+.gate .alt { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 14px; font-size: 13.5px; color: var(--on-night-muted); }
+.gate .alt button { background: none; border: 0; padding: 0; font: inherit; color: var(--orange); font-weight: 600; cursor: pointer; }
+.gate .msg { font-size: 14px; line-height: 1.5; padding: 12px 14px; border-radius: 10px; background: rgba(246, 239, 228, 0.07); border: 1px solid rgba(246, 239, 228, 0.14); }
+.gate .msg.err { border-color: rgba(247, 127, 0, 0.6); background: rgba(247, 127, 0, 0.12); }
+.gate .msg:empty { display: none; }
+.gate .small { font-size: 12.5px; color: var(--on-night-muted); line-height: 1.5; }
+.gate .spinner { width: 28px; height: 28px; border-radius: 50%; border: 3px solid rgba(246, 239, 228, 0.2); border-top-color: var(--orange); animation: spin 0.9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.who { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; color: var(--on-night-muted); min-width: 0; }
+.who span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 46vw; }
+.logout { background: none; border: 1px solid rgba(246, 239, 228, 0.3); color: var(--on-night); border-radius: 999px; padding: 7px 12px; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+@media (hover: hover) { .logout:hover { border-color: var(--on-night); } }
+.preview-band { background: var(--orange); color: #0F0F13; font-size: 13px; font-weight: 600; text-align: center; padding: 8px 16px; }
+
 /* ---------- Bande d'ouverture (nuit) ---------- */
 .hero { background: var(--night); color: var(--on-night); position: relative; overflow: hidden; border-bottom: 1px solid var(--on-night-line); }
 .hero .wrap { position: relative; padding-block: 18px 40px; }
@@ -105,8 +136,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 .hero .glow { position: absolute; inset: 0; background: radial-gradient(60% 50% at 85% 10%, rgba(247, 127, 0, 0.14), transparent 70%); pointer-events: none; }
 .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 48px; }
-.topbar .addr { font-size: 12px; color: var(--on-night-muted); letter-spacing: 0.02em; white-space: nowrap; }
-@media (max-width: 379px) { .topbar .addr { display: none; } }
 .brand { display: block; height: 48px; width: auto; }
 .brand-foot { display: block; height: 58px; width: auto; }
 .logo-bpm { display: block; height: 26px; width: auto; }
@@ -287,13 +316,52 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .version i { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); display: inline-block; }
 </style>
 
+<div id="gate" class="gate">
+  <div class="glow"></div><div class="orbit" aria-hidden="true"></div>
+  <div class="gate-card">
+    <img class="brand" src="assets/apollo-full.png" alt="apollo, créateur de réseaux" width="147" height="52">
+    <div id="gateLoading" class="spinner" aria-label="Chargement"></div>
+    <div id="gateLogin" hidden>
+      <div class="eyebrow">Hub de la Présidence</div>
+      <h1 style="margin-top:10px">Bienvenue <em>à bord.</em></h1>
+      <p class="sub" style="margin-top:10px">Cet espace est réservé aux Président(e)s. Connecte-toi avec ton compte APOLLO.</p>
+      <form id="formPassword" style="margin-top:18px" novalidate>
+        <label>E-mail<input id="loginEmail" type="email" name="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required></label>
+        <label>Mot de passe<input id="loginPassword" type="password" name="password" autocomplete="current-password" required></label>
+        <button class="btn btn-primary" type="submit" id="btnPassword">Entrer</button>
+        <div class="alt"><span>Mot de passe oublié ?</span><button type="button" id="toCode">Recevoir un code par e-mail</button></div>
+      </form>
+      <form id="formCode" hidden novalidate>
+        <label>E-mail<input id="codeEmail" type="email" name="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required></label>
+        <button class="btn btn-primary" type="submit" id="btnSend">Recevoir un code</button>
+        <div class="alt"><button type="button" id="toPassword">Entrer avec mon mot de passe</button></div>
+      </form>
+      <form id="formVerify" hidden novalidate>
+        <p class="sub" id="verifyHint" style="margin-bottom:6px"></p>
+        <label>Code reçu<input id="codeToken" type="text" name="token" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="8" required></label>
+        <button class="btn btn-primary" type="submit" id="btnVerify">Entrer</button>
+        <div class="alt"><button type="button" id="resend">Renvoyer un code</button><button type="button" id="backToEmail">Changer d'adresse</button></div>
+      </form>
+      <div class="msg" id="gateMsg" style="margin-top:14px"></div>
+      <p class="small" style="margin-top:16px">Le même compte que l'app APOLLO et l'Espace Président. Une question d'accès : ton Consultant.</p>
+    </div>
+    <div id="gateDenied" hidden>
+      <div class="eyebrow">Hub de la Présidence</div>
+      <h1 style="margin-top:10px">Un espace <em>réservé.</em></h1>
+      <p class="sub" style="margin-top:10px" id="deniedText">Ce hub est réservé aux Président(e)s de groupe APOLLO. Ton compte est bien reconnu, sans le rôle de Président(e) pour l'instant.</p>
+      <div style="margin-top:18px; display:grid; gap:10px"><button class="btn btn-ghost" type="button" data-logout>Changer de compte</button></div>
+    </div>
+  </div>
+</div>
+<div id="hubRoot"></div>
+<template id="hubTpl">
 <header class="hero">
   <div class="glow"></div>
   <div class="wrap">
     <div class="orbit" aria-hidden="true"></div>
     <div class="topbar">
       <img class="brand" src="assets/apollo-full.png" alt="apollo, créateur de réseaux" width="136" height="48">
-      <div class="addr">president.apollo-business.com</div>
+      <div class="who"><span id="whoName"></span><button type="button" class="logout" data-logout>Déconnexion</button></div>
     </div>
     <div class="hero-body">
       <div class="eyebrow">Hub de la Présidence</div>
@@ -488,11 +556,14 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
     <div class="meta">
       <span>Hub de la Présidence · president.apollo-business.com · © 2026 APOLLO® · Document équipe de pilotage</span>
       <span class="lang"><span class="on">FR</span><span>EN, bientôt</span></span>
+      <button type="button" class="logout" data-logout>Déconnexion</button>
       <span class="version"><i></i><span id="hubVersion">Maquette</span></span>
     </div>
   </div>
 </footer>
+</template>
 
+<script src="supabase.js"></script>
 <script>
 /* ============================================================
    CONFIGURATION DU HUB : une adresse se change ici, en une ligne.
@@ -517,25 +588,162 @@ const HUB = {
     guidePdf: "",
     guideA4:  "",
     roadmap:  ""
-  }
+  },
+  /* Connexion : le projet Supabase de l'app APOLLO France (clé publique, comme dans l'Espace Président). */
+  supabaseUrl: "https://iaqcmrzgvlbedbiwyuze.supabase.co",
+  supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhcWNtcnpndmxiZWRiaXd5dXplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkyMjYwMTMsImV4cCI6MjA1NDgwMjAxM30.kzG-7mJ5srAUynfHS47Q_neeDWxYGrDi76klY3O-XHI",
+  /* Qui entre : rôle Président(e) actif (president) et comptes nationaux CEO, DN, DR, Consultant (admin), comme l'Espace Président. */
+  allowedHow: ["president", "admin"],
+  previewNoGate: false
 };
+
 (function () {
-  document.querySelectorAll("[data-link]").forEach(function (a) {
-    var key = a.getAttribute("data-link");
-    var url = (HUB.links[key] || "").trim();
-    if (url) {
-      a.setAttribute("href", url);
-      if (url.indexOf("http") === 0) { a.setAttribute("target", "_blank"); a.setAttribute("rel", "noopener"); }
-      a.classList.remove("soon");
-    } else {
-      a.classList.add("soon");
-      a.setAttribute("aria-disabled", "true");
-      a.setAttribute("title", a.classList.contains("tool") ? "Adresse à renseigner" : "Bientôt en ligne");
-      a.addEventListener("click", function (e) { e.preventDefault(); });
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var gate = $("gate"), hubRoot = $("hubRoot"), tpl = $("hubTpl");
+  var sb = null;
+
+  function applyLinks(root) {
+    root.querySelectorAll("[data-link]").forEach(function (a) {
+      var key = a.getAttribute("data-link");
+      var url = (HUB.links[key] || "").trim();
+      if (url) {
+        a.setAttribute("href", url);
+        if (url.indexOf("http") === 0) { a.setAttribute("target", "_blank"); a.setAttribute("rel", "noopener"); }
+        a.classList.remove("soon");
+      } else {
+        a.classList.add("soon");
+        a.setAttribute("aria-disabled", "true");
+        a.setAttribute("title", a.classList.contains("tool") ? "Adresse à renseigner" : "Bientôt en ligne");
+        a.addEventListener("click", function (e) { e.preventDefault(); });
+      }
+    });
+  }
+
+  function showHub(me) {
+    if (!hubRoot.firstElementChild) {
+      hubRoot.appendChild(tpl.content.cloneNode(true));
+      applyLinks(hubRoot);
+      var v = $("hubVersion"); if (v) v.textContent = HUB.version;
+      var s = $("scriptVersion"); if (s) s.textContent = HUB.scriptVersion;
+      hubRoot.querySelectorAll("[data-logout]").forEach(function (b) { b.addEventListener("click", logout); });
     }
-  });
-  var v = document.getElementById("hubVersion"); if (v) v.textContent = HUB.version;
-  var s = document.getElementById("scriptVersion"); if (s) s.textContent = HUB.scriptVersion;
+    var who = $("whoName");
+    if (who) who.textContent = me ? [me.fn, me.ln ? String(me.ln).toUpperCase() : ""].join(" ").trim() + (me.group ? " · " + me.group : "") : "";
+    gate.hidden = true; hubRoot.hidden = false;
+    document.body.classList.remove("gated");
+  }
+
+  function showGate(state, msg, isErr) {
+    hubRoot.hidden = true; gate.hidden = false;
+    document.body.classList.add("gated");
+    $("gateLoading").hidden = state !== "loading";
+    $("gateLogin").hidden = state !== "login";
+    $("gateDenied").hidden = state !== "denied";
+    var m = $("gateMsg"); m.textContent = msg || ""; m.classList.toggle("err", !!isErr);
+  }
+
+  function mode(which) {
+    $("formPassword").hidden = which !== "password";
+    $("formCode").hidden = which !== "code";
+    $("formVerify").hidden = which !== "verify";
+    $("gateMsg").textContent = "";
+    var focus = { password: "loginEmail", code: "codeEmail", verify: "codeToken" }[which];
+    setTimeout(function () { var el = $(focus); if (el) el.focus(); }, 50);
+  }
+
+  function friendly(error) {
+    var s = String((error && error.message) || error || "").toLowerCase();
+    if (s.indexOf("invalid login") >= 0 || s.indexOf("invalid credentials") >= 0) return "Cet e-mail ou ce mot de passe est inconnu. Tu peux aussi recevoir un code par e-mail.";
+    if (s.indexOf("rate") >= 0 || s.indexOf("too many") >= 0) return "Trop d'essais en peu de temps. Réessaie dans quelques minutes.";
+    if (s.indexOf("token has expired") >= 0 || s.indexOf("invalid") >= 0 && s.indexOf("otp") >= 0 || s.indexOf("expired") >= 0) return "Ce code est expiré ou incorrect. Demande un nouveau code.";
+    if (s.indexOf("signups not allowed") >= 0 || s.indexOf("user not found") >= 0) return "Cet e-mail est inconnu dans l'app APOLLO. Vérifie l'adresse de ton compte.";
+    if (s.indexOf("email not confirmed") >= 0) return "Ton compte attend une confirmation d'e-mail. Utilise « Recevoir un code ».";
+    if (s.indexOf("failed to fetch") >= 0 || s.indexOf("network") >= 0) return "Pas de réseau pour l'instant. Réessaie dans un instant.";
+    return "La connexion a échoué. Réessaie, ou demande un code par e-mail.";
+  }
+
+  function busy(btn, on, label) { btn.disabled = on; if (label) btn.textContent = on ? label : btn.getAttribute("data-label"); }
+
+  async function check() {
+    if (!sb) { showGate("login", "Connexion indisponible sur cette page.", true); return; }
+    var sess = (await sb.auth.getSession()).data.session;
+    if (!sess) { showGate("login"); mode("password"); return; }
+    showGate("loading");
+    var r = await sb.rpc("deck_fr_my_groups");
+    if (r.error) { showGate("login", friendly(r.error), true); mode("password"); return; }
+    var d = r.data || {};
+    var groups = Array.isArray(d.groups) ? d.groups : [];
+    var ok = groups.some(function (g) { return HUB.allowedHow.indexOf(g.how) >= 0; });
+    if (!ok) { showGate("denied"); return; }
+    var me = d.me || {};
+    if (!me.group) { var pg = groups.filter(function (g) { return g.how === "president"; })[0] || groups[0]; if (pg) me.group = pg.name; }
+    showHub(me);
+  }
+
+  async function logout() {
+    try { if (sb) await sb.auth.signOut(); } catch (e) {}
+    hubRoot.innerHTML = "";
+    showGate("login"); mode("password");
+  }
+
+  function init() {
+    if (HUB.previewNoGate) {
+      var band = document.createElement("div"); band.className = "preview-band";
+      band.textContent = "Maquette : sur president.apollo-business.com, l'accès demande une connexion Président.";
+      document.body.insertBefore(band, gate);
+      showHub({ fn: "Prénom", ln: "Nom", group: "Groupe de démonstration" });
+      return;
+    }
+    if (!window.supabase || !HUB.supabaseUrl) { showGate("login", "Connexion indisponible sur cette page.", true); return; }
+    sb = window.supabase.createClient(HUB.supabaseUrl, HUB.supabaseKey, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false } });
+
+    ["btnPassword", "btnSend", "btnVerify"].forEach(function (id) { $(id).setAttribute("data-label", $(id).textContent); });
+    $("toCode").addEventListener("click", function () { $("codeEmail").value = $("loginEmail").value; mode("code"); });
+    $("toPassword").addEventListener("click", function () { mode("password"); });
+    $("backToEmail").addEventListener("click", function () { mode("code"); });
+    $("gateDenied").querySelector("[data-logout]").addEventListener("click", logout);
+
+    $("formPassword").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      var email = $("loginEmail").value.trim().toLowerCase(), pwd = $("loginPassword").value;
+      if (!email || !pwd) { showGate("login", "Renseigne ton e-mail et ton mot de passe.", true); return; }
+      busy($("btnPassword"), true, "Connexion…");
+      var r = await sb.auth.signInWithPassword({ email: email, password: pwd });
+      busy($("btnPassword"), false);
+      if (r.error) { showGate("login", friendly(r.error), true); return; }
+      check();
+    });
+
+    async function sendCode() {
+      var email = $("codeEmail").value.trim().toLowerCase();
+      if (!email) { showGate("login", "Renseigne l'e-mail de ton compte APOLLO.", true); mode("code"); return; }
+      busy($("btnSend"), true, "Envoi…");
+      var r = await sb.auth.signInWithOtp({ email: email, options: { shouldCreateUser: false } });
+      busy($("btnSend"), false);
+      if (r.error) { showGate("login", friendly(r.error), true); mode("code"); return; }
+      $("verifyHint").textContent = "Un code vient de partir vers " + email + ". Il est valable quelques minutes.";
+      mode("verify");
+    }
+    $("formCode").addEventListener("submit", function (e) { e.preventDefault(); sendCode(); });
+    $("resend").addEventListener("click", sendCode);
+
+    $("formVerify").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      var email = $("codeEmail").value.trim().toLowerCase(), token = $("codeToken").value.replace(/\s+/g, "");
+      if (!token) { showGate("login", "Saisis le code reçu par e-mail.", true); mode("verify"); return; }
+      busy($("btnVerify"), true, "Vérification…");
+      var r = await sb.auth.verifyOtp({ email: email, token: token, type: "email" });
+      busy($("btnVerify"), false);
+      if (r.error) { showGate("login", friendly(r.error), true); mode("verify"); return; }
+      check();
+    });
+
+    sb.auth.onAuthStateChange(function (event) { if (event === "SIGNED_OUT") { hubRoot.innerHTML = ""; showGate("login"); mode("password"); } });
+    showGate("loading");
+    check();
+  }
+  init();
 })();
 </script>
 
