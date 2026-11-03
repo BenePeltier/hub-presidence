@@ -647,7 +647,6 @@ const HUB = {
     $("formPassword").hidden = which !== "password";
     $("formCode").hidden = which !== "code";
     $("formVerify").hidden = which !== "verify";
-    $("gateMsg").textContent = "";
     var focus = { password: "loginEmail", code: "codeEmail", verify: "codeToken" }[which];
     setTimeout(function () { var el = $(focus); if (el) el.focus(); }, 50);
   }
@@ -663,7 +662,8 @@ const HUB = {
     return "La connexion a échoué. Réessaie, ou demande un code par e-mail.";
   }
 
-  function busy(btn, on, label) { btn.disabled = on; if (label) btn.textContent = on ? label : btn.getAttribute("data-label"); }
+  function busy(btn, on, label) { btn.disabled = on; btn.textContent = on ? (label || btn.textContent) : btn.getAttribute("data-label"); }
+  function clearMsg() { var m = $("gateMsg"); m.textContent = ""; m.classList.remove("err"); }
 
   async function check() {
     if (!sb) { showGate("login", "Connexion indisponible sur cette page.", true); return; }
@@ -699,9 +699,9 @@ const HUB = {
     sb = window.supabase.createClient(HUB.supabaseUrl, HUB.supabaseKey, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false } });
 
     ["btnPassword", "btnSend", "btnVerify"].forEach(function (id) { $(id).setAttribute("data-label", $(id).textContent); });
-    $("toCode").addEventListener("click", function () { $("codeEmail").value = $("loginEmail").value; mode("code"); });
-    $("toPassword").addEventListener("click", function () { mode("password"); });
-    $("backToEmail").addEventListener("click", function () { mode("code"); });
+    $("toCode").addEventListener("click", function () { $("codeEmail").value = $("loginEmail").value; clearMsg(); mode("code"); });
+    $("toPassword").addEventListener("click", function () { clearMsg(); mode("password"); });
+    $("backToEmail").addEventListener("click", function () { clearMsg(); mode("code"); });
     $("gateDenied").querySelector("[data-logout]").addEventListener("click", logout);
 
     $("formPassword").addEventListener("submit", async function (e) {
