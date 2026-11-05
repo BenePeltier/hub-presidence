@@ -7,9 +7,12 @@ Site statique de **https://president.apollo-business.com** (GitHub Pages).
 2. Changer l'adresse voulue (une adresse vide affiche « Adresse à renseigner » ou « bientôt »).
 3. Enregistrer le commit sur `main` : le site est republié en moins d'une minute.
 
-## Mettre à jour le script de la réunion
-Déposer les versions téléphone dans `script/nouveau/index.html` et `script/classique/index.html`,
-les PDF dans `docs/`, puis renseigner les adresses dans le bloc `HUB.links`.
+## Le script de la réunion
+Les scripts (version téléphone) et les livrets A4 sont dans `docs/`, chiffrés (AES-256-GCM) :
+ils se lisent depuis le hub, après connexion. La clé de lecture est remise par la fonction `public.hub_cle()`
+de la base APOLLO France, aux seuls rôles de l'équipe de pilotage (Président, Vice-Président, Secrétaire Général,
+Coach Éducateur, comptes nationaux).
+Une nouvelle version se monte depuis le projet (`build.py`) : il chiffre les fichiers et met à jour leurs adresses dans `index.html`.
 
 ## Source de la page
 La page est générée depuis le projet « Support Plaquette Formation APOLLO » (template.html + build.py) :
